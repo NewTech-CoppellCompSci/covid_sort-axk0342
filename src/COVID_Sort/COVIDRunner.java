@@ -132,10 +132,17 @@ public class COVIDRunner {
 	 * sorts the new confirmed cases
 	 */
 	public static void bubbleSort(ArrayList<CountryCOVID> data) {
-		// TODO		
-		
-		
-		
+		// TODO
+		for (int i = 0; i < data.size() - 1; i++) {
+			for (int j = 0; j < data.size() - 1; j++) {
+				if (data.get(j).getNewConfirmed() > data.get(j + 1).getNewConfirmed()) {
+					swap(data, j, j+1);
+				} else {
+
+				}
+			}
+		}
+
 	}
 	
 	
@@ -145,16 +152,36 @@ public class COVIDRunner {
 	 */
 	public static void selectionSort(ArrayList<CountryCOVID> data) {
 		// TODO
+		 for (int i = 0; i < data.size()-1; i++){
+	            int min_index = i;
+	            for (int j = i+1; j < data.size(); j++) {
+	                if (data.get(j).getTotalConfirmed() < data.get(min_index).getTotalConfirmed()) {
+	                	min_index = j;
+	                	swap(data,min_index, j);
+	                }
+	            }
+	        }
 	}
 	
 	
 	
 	/*
 	 * INSERTION SORT
-	 * sorts the new recovered using an Insertion Sort algorithm
+	 * sorts the total recovered using an Insertion Sort algorithm
 	 */
 	public static void insertionSort(ArrayList<CountryCOVID> data) {
 		// TODO
+		for (int i = 1; i < data.size(); ++i) {
+            int key = data.get(i).getTotalRecovered();
+            int j = i - 1;
+            int next;
+            while (j >= 0 && data.get(j).getTotalRecovered() > key) {
+            	next = data.get(j+1).getTotalRecovered();
+            	next = data.get(j).getTotalRecovered();
+                j = j - 1;
+            }
+            next = key;
+        }
 	}
 	
 	
@@ -164,7 +191,12 @@ public class COVIDRunner {
 	 * sorts the new deaths using a Merge Sort algorithm
 	 */
 	public static void mergeSortNew(ArrayList<CountryCOVID> data, int front, int back) {
-		// TODO
+		if (front < back) {
+            int mid =front+ (back-front)/2;
+            mergeSortNew(data, front, back);
+            mergeSortNew(data, mid + 1, back);
+            mergeNew(data, front, mid, back);
+		}
 	}
 	
 	public static void mergeNew(ArrayList<CountryCOVID> data, int front, int mid, int back) {
@@ -254,13 +286,45 @@ public class COVIDRunner {
 	public static void findRangeConfirmed(ArrayList<CountryCOVID> data, JSON_COVID_Data jsonData, int bottom, int top) {
 		int low = 0;				//stores index of lowest in range
 		int high = data.size() - 1;	//stores index of highest in range
-		
+		int midIndex;
+		int bottomIndex = 0;
 		// TODO
+		while (low < high) {
+			midIndex = (high + low) / 2;
+			if (bottom == data.get(midIndex).getTotalConfirmed()) {
+				midIndex = bottomIndex;
+				break;
+			}
+			else if (bottom > data.get(midIndex).getTotalConfirmed()) {
+				low = midIndex + 1;
+			}
+			else if (bottom < data.get(midIndex).getTotalConfirmed()) {
+				high = midIndex - 1;
+			}
+		}
+		low = 0;				//stores index of lowest in range
+		high = data.size() - 1;	//stores index of highest in range
+		midIndex = 0;
+		int topIndex = data.size() - 1;
+		// TODO
+		while (low < high) {
+			midIndex = (high + low) / 2;
+			if (top == data.get(midIndex).getTotalConfirmed()) {
+				midIndex = topIndex;
+				break;
+			}
+			else if (top > data.get(midIndex).getTotalConfirmed()) {
+				low = midIndex + 1;
+			}
+			else if (top < data.get(midIndex).getTotalConfirmed()) {
+				high = midIndex - 1;
+			}
+		}
 		
 		
 		
 		//prints range
-		System.out.println(jsonData.printRange(low, high));
+		System.out.println(jsonData.printRange(bottomIndex, topIndex));
 	}
 	
 	/*
